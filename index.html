@@ -397,4 +397,5 @@ loadSeats();
 </script>
 </body>
 </html>
-const {data,error}=await db.from("seats").select("*").order("seat_number");
+
+const {data,error}=await db.from("seats").select("*").order("id");
