@@ -1,34 +1,33 @@
+
 <!DOCTYPE html>
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GK LIBRARY</title>
+<title>GK LIBRARY - Online Admission</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f3f6fc;color:#17233b}
-header{background:#101d36;color:white;padding:20px;text-align:center}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f6fc;color:#17233b}
+header{background:#101d36;color:white;text-align:center;padding:22px}
 .logo{font-size:28px;color:#f4c65e;font-weight:bold}
 nav{margin-top:15px}
 nav a{color:white;text-decoration:none;margin:8px;font-size:14px}
-.hero{background:linear-gradient(120deg,#101d36,#28527a);color:white;padding:65px 20px;text-align:center}
-.hero h1{font-size:35px;margin-bottom:15px}
+.hero{background:linear-gradient(120deg,#101d36,#28527a);color:white;text-align:center;padding:55px 15px}
+.hero h1{font-size:34px}
 .hero span{color:#f4c65e}
-.hero p{line-height:1.7}
-.btn{display:inline-block;background:#f4c65e;color:#101d36;padding:13px 22px;border:0;border-radius:8px;font-weight:bold;text-decoration:none;margin:12px 5px;cursor:pointer}
-section{padding:40px 18px;max-width:850px;margin:auto}
-h2{text-align:center;margin-bottom:25px;color:#172b4d}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px}
-.card{background:white;padding:22px;border-radius:12px;text-align:center;box-shadow:0 3px 12px #0001}
-.formbox{background:white;padding:22px;border-radius:15px;box-shadow:0 3px 15px #0001}
-label{display:block;margin:14px 0 6px;font-weight:bold}
+section{max-width:750px;margin:auto;padding:30px 16px}
+h2{text-align:center}
+.card,.formbox{background:white;padding:22px;border-radius:14px;margin:15px 0;box-shadow:0 3px 15px #0001}
 input,select,textarea{width:100%;padding:13px;border:1px solid #ccd3df;border-radius:8px;font-size:15px}
-.payment{text-align:center;background:#fff8e7;padding:20px;border-radius:12px;margin:20px 0}
-.payment img{width:100%;max-width:290px;border-radius:10px;margin:15px auto;display:block}
-.price{font-size:30px;color:#087d45;font-weight:bold}
+label{display:block;margin:14px 0 6px;font-weight:bold}
+button{background:#f4c65e;color:#101d36;border:0;padding:14px;border-radius:8px;font-weight:bold;font-size:16px;width:100%;margin-top:18px}
+.price{font-size:30px;color:#078044;font-weight:bold;text-align:center}
+.payment{text-align:center;background:#fff8e7;padding:18px;border-radius:12px;margin-top:18px}
+.payment img{width:100%;max-width:270px;display:block;margin:15px auto;border-radius:10px}
+.timer{font-size:32px;color:#d32f2f;font-weight:bold}
 .note{font-size:13px;color:#555;line-height:1.6}
-button{font-size:16px}
-footer{background:#101d36;color:white;text-align:center;padding:25px;line-height:2}
+#paymentBox,#success,#expired{display:none}
+footer{background:#101d36;color:white;text-align:center;padding:25px}
 </style>
 </head>
 <body>
@@ -46,39 +45,41 @@ footer{background:#101d36;color:white;text-align:center;padding:25px;line-height
 <div class="hero" id="home">
 <h1>Your Success Starts<br>At <span>GK LIBRARY</span></h1>
 <p>शांत वातावरण में पढ़ाई करें और अपने सपनों को पूरा करें।</p>
-<a class="btn" href="#admission">Online Admission</a>
 </div>
 
 <section id="facilities">
 <h2>Our Facilities</h2>
-<div class="cards">
-<div class="card">📚<h3>शांत वातावरण</h3><p>पढ़ाई के लिए शांत जगह</p></div>
-<div class="card">🪑<h3>Comfortable Seats</h3><p>आरामदायक सीट</p></div>
-<div class="card">📶<h3>Wi-Fi</h3><p>Wi-Fi की सुविधा उपलब्ध होने पर</p></div>
-<div class="card">⏰<h3>Study Time</h3><p>अपनी पढ़ाई पर पूरा ध्यान</p></div>
-</div>
+<div class="card">📚 शांत वातावरण</div>
+<div class="card">🪑 Comfortable Seats</div>
+<div class="card">📖 Study Time</div>
 </section>
 
 <section id="admission">
-<h2>Online Admission Form</h2>
+<h2>Online Admission</h2>
 <div class="formbox">
 
 <form id="admissionForm">
 <label>Student Name</label>
-<input id="student" required placeholder="अपना पूरा नाम लिखें">
+<input id="student" required placeholder="अपना पूरा नाम">
 
 <label>Father's Name</label>
 <input id="father" required placeholder="पिता का नाम">
 
 <label>Mobile Number</label>
-<input id="mobile" type="tel" pattern="[0-9]{10}" maxlength="10" required placeholder="10 अंकों का मोबाइल नंबर">
+<input id="mobile" required type="tel" maxlength="10" pattern="[0-9]{10}" placeholder="10 अंकों का मोबाइल नंबर">
 
 <label>Address</label>
 <textarea id="address" required placeholder="अपना पूरा पता"></textarea>
 
-<label>Select Seat</label>
-<select id="seat" required>
-<option value="">सीट चुनें</option>
+<label>कितनी सीट चाहिए?</label>
+<select id="seatCount" required>
+<option value="1">1 Seat</option>
+<option value="2">2 Seats</option>
+<option value="3">3 Seats</option>
+</select>
+
+<label>Seat Number (अपनी पसंद की सीट)</label>
+<select id="seatNumber" required>
 <option>Seat 01</option>
 <option>Seat 02</option>
 <option>Seat 03</option>
@@ -90,24 +91,41 @@ footer{background:#101d36;color:white;text-align:center;padding:25px;line-height
 <input id="date" type="date" required>
 
 <div class="payment">
-<h3>GK LIBRARY Monthly Fee</h3>
-<div class="price">₹400 / Month</div>
-<p>PhonePe से QR Code स्कैन करके ₹400 पेमेंट करें।</p>
-
-<img src="IMG_20261102_163016.jpg" alt="GK Library PhonePe Payment QR Code">
-
-<p class="note">QR Code स्कैन करके पेमेंट करें। पेमेंट करने के बाद UTR / Transaction ID नीचे भरें।</p>
+<h3>Monthly Membership Fee</h3>
+<div class="price" id="fee">₹400</div>
+<p>प्रति महीने की फीस</p>
 </div>
 
-<label>Payment UTR / Transaction ID</label>
-<input id="utr" required placeholder="पेमेंट का UTR नंबर लिखें">
-
-<button class="btn" type="submit">Submit Admission Request</button>
+<button type="submit">Continue to Payment</button>
 </form>
 
-<div id="success" style="display:none;background:#e7f8ed;padding:18px;border-radius:10px;margin-top:20px">
-<h3>Request Submitted!</h3>
-<p>आपकी Admission Request इस डिवाइस में सेव हुई है। Admin से पेमेंट की पुष्टि करवाएँ।</p>
+<div id="paymentBox" class="payment">
+<h2>PhonePe Payment</h2>
+<p>भुगतान करें: </p>
+<div class="price" id="payAmount">₹400</div>
+<p>नीचे QR Code स्कैन करके पेमेंट करें।</p>
+
+<img src="IMG_20261102_163016.jpg" alt="GK Library Payment QR">
+
+<p>Payment करने का समय बाकी:</p>
+<div class="timer" id="timer">10:00</div>
+
+<form id="utrForm">
+<label>UTR / Transaction ID</label>
+<input id="utr" required placeholder="12 अंकों का UTR नंबर">
+<button type="submit" id="submitPayment">Payment Submitted</button>
+</form>
+<p class="note">UTR जमा करने के बाद Admin आपके पेमेंट की जाँच करेगा।</p>
+</div>
+
+<div id="success" class="card">
+<h2 style="color:green">Request Submitted Successfully!</h2>
+<p>आपकी Admission Request जमा हो गई है। Admin पेमेंट की पुष्टि करके Admission Approve करेगा।</p>
+</div>
+
+<div id="expired" class="card">
+<h2 style="color:red">Payment Session Expired!</h2>
+<p>10 मिनट पूरे हो गए। नया Payment Session शुरू करने के लिए पेज Refresh करें और फॉर्म दोबारा भरें।</p>
 </div>
 
 </div>
@@ -118,39 +136,86 @@ footer{background:#101d36;color:white;text-align:center;padding:25px;line-height
 <div class="card">
 <p>📍 Kaurihar Road, Raxaul, Bihar</p>
 <p>📞 091554 14805</p>
-<p>💰 Monthly Fee: ₹400</p>
 </div>
 </section>
 
 <footer>
-<h3>📚 GK LIBRARY</h3>
+<h3>GK LIBRARY</h3>
 <p>Your Success Starts At GK LIBRARY</p>
-<p>© 2026 GK LIBRARY</p>
 </footer>
 
 <script>
+const seatCount=document.getElementById("seatCount");
+const fee=document.getElementById("fee");
+const prices={1:400,2:700,3:800};
+let timerInterval;
+let seconds=600;
+let currentFee=400;
+
+seatCount.addEventListener("change",function(){
+currentFee=prices[this.value];
+fee.textContent="₹"+currentFee;
+});
+
 document.getElementById("admissionForm").addEventListener("submit",function(e){
 e.preventDefault();
+
+currentFee=prices[seatCount.value];
+document.getElementById("payAmount").textContent="₹"+currentFee;
+
+this.style.display="none";
+document.getElementById("paymentBox").style.display="block";
+
+seconds=600;
+updateTimer();
+
+timerInterval=setInterval(function(){
+seconds--;
+updateTimer();
+
+if(seconds<=0){
+clearInterval(timerInterval);
+document.getElementById("paymentBox").style.display="none";
+document.getElementById("expired").style.display="block";
+}
+},1000);
+});
+
+function updateTimer(){
+let min=Math.floor(seconds/60);
+let sec=seconds%60;
+document.getElementById("timer").textContent=
+String(min).padStart(2,"0")+":"+String(sec).padStart(2,"0");
+}
+
+document.getElementById("utrForm").addEventListener("submit",function(e){
+e.preventDefault();
+
+if(seconds<=0){
+return;
+}
 
 const request={
 student:document.getElementById("student").value,
 father:document.getElementById("father").value,
 mobile:document.getElementById("mobile").value,
 address:document.getElementById("address").value,
-seat:document.getElementById("seat").value,
+seatCount:seatCount.value,
+seatNumber:document.getElementById("seatNumber").value,
 date:document.getElementById("date").value,
+fee:currentFee,
 utr:document.getElementById("utr").value,
-fee:400
+status:"Pending Admin Verification"
 };
 
 let requests=JSON.parse(localStorage.getItem("gkAdmissions")||"[]");
 requests.push(request);
 localStorage.setItem("gkAdmissions",JSON.stringify(requests));
 
+clearInterval(timerInterval);
+document.getElementById("paymentBox").style.display="none";
 document.getElementById("success").style.display="block";
-this.reset();
 });
 </script>
-
 </body>
 </html>
