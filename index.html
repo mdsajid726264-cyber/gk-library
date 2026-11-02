@@ -4,218 +4,396 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GK LIBRARY - Online Admission</title>
+<title>GK LIBRARY | Raxaul</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
+:root{--navy:#10243b;--blue:#1769aa;--gold:#f4b942;--bg:#f4f7fb;--green:#16834b;--red:#d94444}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f3f6fc;color:#17233b}
-header{background:#101d36;color:white;text-align:center;padding:22px}
-.logo{font-size:28px;color:#f4c65e;font-weight:bold}
-nav{margin-top:15px}
-nav a{color:white;text-decoration:none;margin:8px;font-size:14px}
-.hero{background:linear-gradient(120deg,#101d36,#28527a);color:white;text-align:center;padding:55px 15px}
-.hero h1{font-size:34px}
-.hero span{color:#f4c65e}
-section{max-width:750px;margin:auto;padding:30px 16px}
-h2{text-align:center}
-.card,.formbox{background:white;padding:22px;border-radius:14px;margin:15px 0;box-shadow:0 3px 15px #0001}
-input,select,textarea{width:100%;padding:13px;border:1px solid #ccd3df;border-radius:8px;font-size:15px}
-label{display:block;margin:14px 0 6px;font-weight:bold}
-button{background:#f4c65e;color:#101d36;border:0;padding:14px;border-radius:8px;font-weight:bold;font-size:16px;width:100%;margin-top:18px}
-.price{font-size:30px;color:#078044;font-weight:bold;text-align:center}
-.payment{text-align:center;background:#fff8e7;padding:18px;border-radius:12px;margin-top:18px}
-.payment img{width:100%;max-width:270px;display:block;margin:15px auto;border-radius:10px}
-.timer{font-size:32px;color:#d32f2f;font-weight:bold}
-.note{font-size:13px;color:#555;line-height:1.6}
-#paymentBox,#success,#expired{display:none}
-footer{background:#101d36;color:white;text-align:center;padding:25px}
+body{margin:0;font-family:Poppins,'Noto Sans Devanagari',sans-serif;background:var(--bg);color:#182638}
+header{background:var(--navy);color:white;padding:17px 5%;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{font-size:23px;font-weight:800}.logo span{color:var(--gold)}
+nav{display:flex;gap:15px;flex-wrap:wrap}
+nav a{color:white;text-decoration:none;font-size:13px}
+.hero{padding:65px 6%;background:linear-gradient(120deg,#10243b,#1769aa);color:white;text-align:center}
+.hero h1{font-size:clamp(30px,6vw,48px);margin:0 0 12px}
+.hero p{max-width:650px;margin:0 auto 22px;color:#e5edf7}
+.btn{display:inline-block;border:0;border-radius:9px;padding:12px 18px;background:var(--gold);color:#172638;font-weight:700;text-decoration:none;cursor:pointer}
+.btn.blue{background:var(--blue);color:white}
+.btn.green{background:var(--green);color:white}
+.btn.red{background:var(--red);color:white}
+section{padding:38px 5%;max-width:1150px;margin:auto}
+h2{text-align:center;color:var(--navy);margin:0 0 24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.card{background:white;padding:20px;border-radius:15px;box-shadow:0 5px 22px #10243b0d}
+.card h3{margin-top:0;color:var(--navy)}
+.photos{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px}
+.photos img{width:100%;height:230px;object-fit:cover;border-radius:14px}
+.seats{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+.seat{padding:12px 3px;border:0;border-radius:8px;background:#dff5e7;color:#116b3b;font-weight:700;cursor:pointer}
+.seat.pending{background:#fff0c9;color:#875c00}
+.seat.booked{background:#ffe0e0;color:#a52626;cursor:not-allowed}
+.seat.selected{outline:3px solid var(--blue);background:#cce6ff}
+.legend{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;font-size:12px;margin:15px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+label{display:block;font-size:13px;font-weight:600;margin:12px 0 5px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d4dce6;border-radius:8px;font:inherit;background:white}
+form{max-width:650px;margin:auto}
+.fee{font-size:24px;color:var(--green);font-weight:800;text-align:center;padding:12px}
+.qr{display:block;width:210px;max-width:100%;margin:15px auto;border-radius:10px}
+.notice{background:#fff5d8;padding:12px;border-radius:9px;font-size:13px}
+.hidden{display:none!important}
+.admin-card{margin:12px 0;border:1px solid #e1e7ee;border-radius:10px;padding:15px;background:#fff}
+footer{text-align:center;background:var(--navy);color:white;padding:25px;font-size:13px}
+.small{font-size:12px;color:#66758a}
+.status{font-weight:700}
+@media(max-width:450px){.seats{grid-template-columns:repeat(4,1fr)}header{justify-content:center}nav{justify-content:center}}
 </style>
 </head>
 <body>
 
 <header>
-<div class="logo">📚 GK LIBRARY</div>
-<nav>
-<a href="#home">Home</a>
-<a href="#facilities">Facilities</a>
-<a href="#admission">Admission</a>
-<a href="#contact">Contact</a>
-</nav>
+ <div class="logo">GK <span>LIBRARY</span></div>
+ <nav>
+  <a href="#home">Home</a>
+  <a href="#facilities">Facilities</a>
+  <a href="#seats">Seats</a>
+  <a href="#admission">Admission</a>
+  <a href="#contact">Contact</a>
+ </nav>
 </header>
 
 <div class="hero" id="home">
-<h1>Your Success Starts<br>At <span>GK LIBRARY</span></h1>
-<p>शांत वातावरण में पढ़ाई करें और अपने सपनों को पूरा करें।</p>
+ <h1>Welcome to GK LIBRARY</h1>
+ <p>शांत वातावरण में पढ़ाई करें और अपने सपनों को पूरा करने की दिशा में आगे बढ़ें।</p>
+ <a class="btn" href="#admission">Admission लें</a>
+ <a class="btn" href="#seats">Seat देखें</a>
 </div>
 
+<section>
+ <h2>हमारी लाइब्रेरी</h2>
+ <div class="photos">
+  <div class="card">
+   <img src="library-inside.jpg" alt="Library Interior" onerror="this.style.display='none'">
+   <b>Library Interior</b>
+  </div>
+  <div class="card">
+   <img src="library-outside.jpg" alt="Library Exterior" onerror="this.style.display='none'">
+   <b>Library Exterior</b>
+  </div>
+ </div>
+ <p class="small">तस्वीरें दिखाने के लिए GitHub में library-inside.jpg और library-outside.jpg नाम की फाइलें अपलोड करें।</p>
+</section>
+
 <section id="facilities">
-<h2>Our Facilities</h2>
-<div class="card">📚 शांत वातावरण</div>
-<div class="card">🪑 Comfortable Seats</div>
-<div class="card">📖 Study Time</div>
+ <h2>Library Facilities</h2>
+ <div class="grid">
+  <div class="card">📚 <h3>Peaceful Study Hall</h3><p>पढ़ाई के लिए शांत वातावरण।</p></div>
+  <div class="card">🪑 <h3>Comfortable Seats</h3><p>आरामदायक बैठने की व्यवस्था।</p></div>
+  <div class="card">🔌 <h3>Charging Sockets</h3><p>डिवाइस चार्ज करने की सुविधा।</p></div>
+  <div class="card">⚡ <h3>Power Backup</h3><p>बिजली बैकअप की सुविधा।</p></div>
+  <div class="card">📶 <h3>High Speed Wi-Fi</h3><p>इंटरनेट सुविधा।</p></div>
+  <div class="card">❄️ <h3>Air Conditioned</h3><p>AC की सुविधा।</p></div>
+  <div class="card">📹 <h3>CCTV Surveillance</h3><p>सुरक्षा के लिए CCTV।</p></div>
+  <div class="card">🔐 <h3>Locker Facilities</h3><p>सामान रखने की सुविधा।</p></div>
+ </div>
+ <p class="small">इन सुविधाओं को वेबसाइट पर प्रकाशित करने से पहले पुष्टि कर लें कि ये वास्तव में उपलब्ध हैं।</p>
+</section>
+
+<section id="seats">
+ <h2>Live Seat Status</h2>
+ <div class="legend">
+  <span><i class="dot" style="background:#16834b"></i>Available</span>
+  <span><i class="dot" style="background:#f4b942"></i>Pending</span>
+  <span><i class="dot" style="background:#d94444"></i>Booked</span>
+ </div>
+ <div id="seatGrid" class="seats">Loading seats...</div>
+ <p class="small">एक से तीन सीट चुन सकते हैं। सीट तभी पक्की होगी जब Admin पेमेंट जाँचकर Admission approve करेगा।</p>
+</section>
+
+<section>
+ <h2>Monthly Fee</h2>
+ <div class="grid">
+  <div class="card"><h3>1 Seat</h3><div class="fee">₹400</div><p>प्रति महीना</p></div>
+  <div class="card"><h3>2 Seats</h3><div class="fee">₹700</div><p>प्रति महीना</p></div>
+  <div class="card"><h3>3 Seats</h3><div class="fee">₹800</div><p>प्रति महीना</p></div>
+ </div>
 </section>
 
 <section id="admission">
-<h2>Online Admission</h2>
-<div class="formbox">
+ <h2>Online Admission Form</h2>
+ <form id="admissionForm" class="card">
+  <label>Student Name</label>
+  <input id="student" required maxlength="80" placeholder="अपना नाम लिखें">
+  <label>Father's Name</label>
+  <input id="father" required maxlength="80" placeholder="पिता का नाम">
+  <label>Mobile Number</label>
+  <input id="mobile" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10 अंकों का मोबाइल नंबर">
+  <label>Address</label>
+  <textarea id="address" required maxlength="300" placeholder="अपना पता लिखें"></textarea>
+  <label>Seats की संख्या</label>
+  <select id="seatCount">
+   <option value="1">1 Seat</option>
+   <option value="2">2 Seats</option>
+   <option value="3">3 Seats</option>
+  </select>
+  <p class="small">नीचे Available सीटों में से चुनें।</p>
+  <div id="chosenSeats" class="notice">कोई सीट नहीं चुनी गई।</div>
+  <div class="fee" id="fee">₹400 / Month</div>
+  <button class="btn blue" type="submit" style="width:100%">Admission Request Submit करें</button>
+  <p id="admissionMessage" class="small"></p>
+ </form>
+</section>
 
-<form id="admissionForm">
-<label>Student Name</label>
-<input id="student" required placeholder="अपना पूरा नाम">
-
-<label>Father's Name</label>
-<input id="father" required placeholder="पिता का नाम">
-
-<label>Mobile Number</label>
-<input id="mobile" required type="tel" maxlength="10" pattern="[0-9]{10}" placeholder="10 अंकों का मोबाइल नंबर">
-
-<label>Address</label>
-<textarea id="address" required placeholder="अपना पूरा पता"></textarea>
-
-<label>कितनी सीट चाहिए?</label>
-<select id="seatCount" required>
-<option value="1">1 Seat</option>
-<option value="2">2 Seats</option>
-<option value="3">3 Seats</option>
-</select>
-
-<label>Seat Number (अपनी पसंद की सीट)</label>
-<select id="seatNumber" required>
-<option>Seat 01</option>
-<option>Seat 02</option>
-<option>Seat 03</option>
-<option>Seat 04</option>
-<option>Seat 05</option>
-</select>
-
-<label>Admission Date</label>
-<input id="date" type="date" required>
-
-<div class="payment">
-<h3>Monthly Membership Fee</h3>
-<div class="price" id="fee">₹400</div>
-<p>प्रति महीने की फीस</p>
-</div>
-
-<button type="submit">Continue to Payment</button>
-</form>
-
-<div id="paymentBox" class="payment">
-<h2>PhonePe Payment</h2>
-<p>भुगतान करें: </p>
-<div class="price" id="payAmount">₹400</div>
-<p>नीचे QR Code स्कैन करके पेमेंट करें।</p>
-
-<img src="IMG_20261102_163016.jpg" alt="GK Library Payment QR">
-
-<p>Payment करने का समय बाकी:</p>
-<div class="timer" id="timer">10:00</div>
-
-<form id="utrForm">
-<label>UTR / Transaction ID</label>
-<input id="utr" required placeholder="12 अंकों का UTR नंबर">
-<button type="submit" id="submitPayment">Payment Submitted</button>
-</form>
-<p class="note">UTR जमा करने के बाद Admin आपके पेमेंट की जाँच करेगा।</p>
-</div>
-
-<div id="success" class="card">
-<h2 style="color:green">Request Submitted Successfully!</h2>
-<p>आपकी Admission Request जमा हो गई है। Admin पेमेंट की पुष्टि करके Admission Approve करेगा।</p>
-</div>
-
-<div id="expired" class="card">
-<h2 style="color:red">Payment Session Expired!</h2>
-<p>10 मिनट पूरे हो गए। नया Payment Session शुरू करने के लिए पेज Refresh करें और फॉर्म दोबारा भरें।</p>
-</div>
-
-</div>
+<section id="payment">
+ <h2>PhonePe Payment</h2>
+ <div class="card" style="max-width:650px;margin:auto;text-align:center">
+  <p>Admission request submit होने के बाद ही payment करें।</p>
+  <img class="qr" src="IMG_20261102_163016.jpg" alt="PhonePe QR">
+  <p class="notice">पेमेंट करने के बाद UTR / Transaction ID नीचे भरें। UTR डालने से पेमेंट अपने-आप verified नहीं होता।</p>
+  <form id="paymentForm">
+   <label>Admission ID</label>
+   <input id="paymentAdmissionId" required placeholder="Admission ID">
+   <label>UTR / Transaction ID</label>
+   <input id="utr" required maxlength="50" placeholder="Transaction ID">
+   <label>Paid Amount (₹)</label>
+   <input id="amount" required type="number" min="1" placeholder="जितना भुगतान किया">
+   <button class="btn green" type="submit" style="width:100%">Payment Details Submit करें</button>
+   <p id="paymentMessage" class="small"></p>
+  </form>
+ </div>
 </section>
 
 <section id="contact">
-<h2>Contact GK LIBRARY</h2>
-<div class="card">
-<p>📍 Kaurihar Road, Raxaul, Bihar</p>
-<p>📞 091554 14805</p>
-</div>
+ <h2>Contact Us</h2>
+ <div class="card" style="text-align:center">
+  <h3>GK LIBRARY</h3>
+  <p>📍 Kaurihar Road, Raxaul, Bihar</p>
+  <p>📞 091554 14805</p>
+  <a class="btn green" href="https://wa.me/919155414805" target="_blank">WhatsApp करें</a>
+  <a class="btn blue" href="https://www.google.com/maps/search/?api=1&query=GK+Library+Kaurihar+Road+Raxaul+Bihar" target="_blank">Google Maps</a>
+ </div>
+</section>
+
+<section id="admin">
+ <h2>Admin Panel</h2>
+ <div class="card" style="max-width:650px;margin:auto">
+  <div id="adminLogin">
+   <label>Admin Email</label>
+   <input id="adminEmail" type="email" placeholder="Admin email">
+   <label>Password</label>
+   <input id="adminPassword" type="password" placeholder="Password">
+   <button class="btn blue" onclick="adminLogin()" style="width:100%;margin-top:15px">Admin Login</button>
+  </div>
+  <div id="adminDashboard" class="hidden">
+   <p>Admin Login Successful</p>
+   <button class="btn red" onclick="adminLogout()">Logout</button>
+   <h3>Admission Requests</h3>
+   <div id="adminAdmissions">Loading...</div>
+   <h3>Payment Requests</h3>
+   <div id="adminPayments">Loading...</div>
+  </div>
+  <p id="adminMessage" class="small"></p>
+ </div>
 </section>
 
 <footer>
-<h3>GK LIBRARY</h3>
-<p>Your Success Starts At GK LIBRARY</p>
+ <b>GK LIBRARY</b><br>
+ Kaurihar Road, Raxaul, Bihar<br>
+ Contact: 091554 14805<br>
+ © 2026 GK LIBRARY
 </footer>
 
 <script>
-const seatCount=document.getElementById("seatCount");
-const fee=document.getElementById("fee");
-const prices={1:400,2:700,3:800};
-let timerInterval;
-let seconds=600;
-let currentFee=400;
+const SUPABASE_URL = "https://eszyrevduobnpjfcknmr.supabase.co";
+const SUPABASE_KEY = "sb_publishable_agE4Zq90RzufPjgKbUrX0w_XgBVYRAN";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-seatCount.addEventListener("change",function(){
-currentFee=prices[this.value];
-fee.textContent="₹"+currentFee;
-});
+let seats = [];
+let selectedSeats = [];
+let currentAdmissionId = null;
+let isAdmin = false;
 
-document.getElementById("admissionForm").addEventListener("submit",function(e){
-e.preventDefault();
+const $ = id => document.getElementById(id);
+const escapeHTML = value => String(value ?? "").replace(/[&<>"']/g, c => ({
+ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
 
-currentFee=prices[seatCount.value];
-document.getElementById("payAmount").textContent="₹"+currentFee;
+function feeFor(n){return n===1?400:n===2?700:800}
 
-this.style.display="none";
-document.getElementById("paymentBox").style.display="block";
-
-seconds=600;
-updateTimer();
-
-timerInterval=setInterval(function(){
-seconds--;
-updateTimer();
-
-if(seconds<=0){
-clearInterval(timerInterval);
-document.getElementById("paymentBox").style.display="none";
-document.getElementById("expired").style.display="block";
-}
-},1000);
-});
-
-function updateTimer(){
-let min=Math.floor(seconds/60);
-let sec=seconds%60;
-document.getElementById("timer").textContent=
-String(min).padStart(2,"0")+":"+String(sec).padStart(2,"0");
+async function loadSeats(){
+ const box=$("seatGrid");
+ const {data,error}=await db.from("seats").select("*").order("seat_number");
+ if(error){box.textContent="Seat data load nahi hua: "+error.message;return}
+ seats=data||[];
+ if(!seats.length){box.textContent="Seats table mein abhi seats nahi hain. Admin se setup karwayein.";return}
+ box.innerHTML="";
+ seats.forEach(s=>{
+  const number=Number(s.seat_number);
+  const status=String(s.status||"available").toLowerCase();
+  const b=document.createElement("button");
+  b.className="seat "+(status==="booked"?"booked":status==="pending"?"pending":"");
+  b.textContent="Seat "+String(number).padStart(2,"0");
+  b.disabled=status!=="available";
+  b.onclick=()=>toggleSeat(number);
+  box.appendChild(b);
+ });
+ renderSelected();
 }
 
-document.getElementById("utrForm").addEventListener("submit",function(e){
-e.preventDefault();
-
-if(seconds<=0){
-return;
+function toggleSeat(number){
+ if(selectedSeats.includes(number)){
+  selectedSeats=selectedSeats.filter(x=>x!==number);
+ }else{
+  const max=Number($("seatCount").value);
+  if(selectedSeats.length>=max){alert("Aap "+max+" seat hi select kar sakte hain.");return}
+  selectedSeats.push(number);
+ }
+ renderSelected();
 }
 
-const request={
-student:document.getElementById("student").value,
-father:document.getElementById("father").value,
-mobile:document.getElementById("mobile").value,
-address:document.getElementById("address").value,
-seatCount:seatCount.value,
-seatNumber:document.getElementById("seatNumber").value,
-date:document.getElementById("date").value,
-fee:currentFee,
-utr:document.getElementById("utr").value,
-status:"Pending Admin Verification"
-};
+function renderSelected(){
+ document.querySelectorAll(".seat").forEach(b=>{
+  const n=Number(b.textContent.replace("Seat ",""));
+  b.classList.toggle("selected",selectedSeats.includes(n));
+ });
+ $("chosenSeats").textContent=selectedSeats.length
+  ? "Selected: "+selectedSeats.map(n=>"Seat "+String(n).padStart(2,"0")).join(", ")
+  : "कोई सीट नहीं चुनी गई।";
+}
 
-let requests=JSON.parse(localStorage.getItem("gkAdmissions")||"[]");
-requests.push(request);
-localStorage.setItem("gkAdmissions",JSON.stringify(requests));
-
-clearInterval(timerInterval);
-document.getElementById("paymentBox").style.display="none";
-document.getElementById("success").style.display="block";
+$("seatCount").addEventListener("change",()=>{
+ const max=Number($("seatCount").value);
+ selectedSeats=selectedSeats.slice(0,max);
+ $("fee").textContent="₹"+feeFor(max)+" / Month";
+ renderSelected();
 });
+
+$("admissionForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const count=Number($("seatCount").value);
+ if(selectedSeats.length!==count){alert("कृपया ठीक "+count+" सीट चुनें।");return}
+ $("admissionMessage").textContent="Submitting...";
+ const {data,error}=await db.from("admissions").insert({
+  student_name:$("student").value.trim(),
+  father_name:$("father").value.trim(),
+  mobile:$("mobile").value.trim(),
+  address:$("address").value.trim(),
+  seat_count:count,
+  seat_ids:selectedSeats,
+  monthly_fee:feeFor(count),
+  status:"pending"
+ }).select("id").single();
+
+ if(error){$("admissionMessage").textContent="Error: "+error.message;return}
+ currentAdmissionId=data.id;
+ $("paymentAdmissionId").value=data.id;
+ $("admissionMessage").textContent="Request submitted! Your Admission ID: "+data.id+". Ab payment karein.";
+ $("admissionForm").reset();
+ selectedSeats=[];
+ $("fee").textContent="₹400 / Month";
+ renderSelected();
+});
+
+$("paymentForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const admissionId=$("paymentAdmissionId").value.trim();
+ const {error}=await db.from("payments").insert({
+  admission_id:admissionId,
+  utr:$("utr").value.trim(),
+  amount:Number($("amount").value),
+  status:"pending"
+ });
+ $("paymentMessage").textContent=error
+  ?"Payment submission error: "+error.message
+  :"Payment details submitted. Admin verification ka wait karein.";
+ if(!error)$("paymentForm").reset();
+});
+
+async function adminLogin(){
+ $("adminMessage").textContent="Checking...";
+ const {data,error}=await db.auth.signInWithPassword({
+  email:$("adminEmail").value.trim(),
+  password:$("adminPassword").value
+ });
+ if(error){$("adminMessage").textContent=error.message;return}
+ const {data:admin,error:adminError}=await db.from("admin_users")
+  .select("user_id").eq("user_id",data.user.id).maybeSingle();
+ if(adminError||!admin){
+  await db.auth.signOut();
+  $("adminMessage").textContent="This account is not an authorized admin.";
+  return;
+ }
+ isAdmin=true;
+ $("adminLogin").classList.add("hidden");
+ $("adminDashboard").classList.remove("hidden");
+ $("adminMessage").textContent="";
+ await loadAdminData();
+}
+
+async function adminLogout(){
+ await db.auth.signOut();
+ isAdmin=false;
+ $("adminDashboard").classList.add("hidden");
+ $("adminLogin").classList.remove("hidden");
+}
+
+async function loadAdminData(){
+ if(!isAdmin)return;
+ const [a,p]=await Promise.all([
+  db.from("admissions").select("*").order("created_at",{ascending:false}),
+  db.from("payments").select("*").order("created_at",{ascending:false})
+ ]);
+ $("adminAdmissions").innerHTML=a.error?escapeHTML(a.error.message):(a.data||[]).map(x=>`
+  <div class="admin-card">
+   <b>${escapeHTML(x.student_name)}</b><br>
+   Mobile: ${escapeHTML(x.mobile)}<br>
+   Admission: ${escapeHTML(x.id)}<br>
+   Seats: ${escapeHTML(JSON.stringify(x.seat_ids))}<br>
+   Fee: ₹${escapeHTML(x.monthly_fee)}<br>
+   Status: <span class="status">${escapeHTML(x.status)}</span><br>
+   <button class="btn green" onclick="decideAdmission('${escapeHTML(x.id)}','approved')">Approve</button>
+   <button class="btn red" onclick="decideAdmission('${escapeHTML(x.id)}','rejected')">Reject</button>
+  </div>`).join("")||"No admissions yet.";
+
+ $("adminPayments").innerHTML=p.error?escapeHTML(p.error.message):(p.data||[]).map(x=>`
+  <div class="admin-card">
+   Admission: ${escapeHTML(x.admission_id)}<br>
+   UTR: ${escapeHTML(x.utr)}<br>
+   Amount: ₹${escapeHTML(x.amount)}<br>
+   Status: ${escapeHTML(x.status)}<br>
+   <button class="btn green" onclick="verifyPayment('${escapeHTML(x.id)}')">Mark Verified</button>
+   <button class="btn red" onclick="rejectPayment('${escapeHTML(x.id)}')">Reject Payment</button>
+  </div>`).join("")||"No payments yet.";
+}
+
+async function verifyPayment(id){
+ if(!confirm("PhonePe/bank mein payment check kar liya hai? Tabhi verify karein."))return;
+ const {error}=await db.from("payments").update({status:"verified"}).eq("id",id);
+ if(error){alert(error.message);return}
+ alert("Payment marked verified.");
+ await loadAdminData();
+}
+
+async function rejectPayment(id){
+ if(!confirm("Is payment ko reject karein?"))return;
+ const {error}=await db.from("payments").update({status:"rejected"}).eq("id",id);
+ if(error){alert(error.message);return}
+ await loadAdminData();
+}
+
+async function decideAdmission(id,status){
+ if(status==="approved"){
+  alert("Approval se pehle payment verified hona zaroori hai. Database mein secure approval rule bhi lagana hoga.");
+  return;
+ }
+ if(!confirm("Admission reject karein?"))return;
+ const {error}=await db.from("admissions").update({status:"rejected"}).eq("id",id);
+ if(error){alert(error.message);return}
+ await loadAdminData();
+}
+
+loadSeats();
 </script>
 </body>
 </html>
